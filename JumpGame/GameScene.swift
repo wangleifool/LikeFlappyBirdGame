@@ -24,12 +24,38 @@ class GameScene: SKScene {
     var bird: SKSpriteNode!
     var gameState: GameState = .ready
     
+    lazy var scoreLabelNode: SKLabelNode = {
+        let scoreLbl = SKLabelNode(fontNamed: Game.FontName.score)
+        scoreLbl.position = CGPoint(x: frame.midX, y: 3 * self.size.height / 4)
+        scoreLbl.zPosition = Game.ZPosition.score
+        return scoreLbl
+    }()
+    
+    var score = 0 {
+        didSet {
+            scoreLabelNode.text = String(score)
+            scoreLabelNode.run(SKAction.sequence([
+                SKAction.scale(to: 1.5, duration: 0.1),
+                SKAction.scale(to: 1.0, duration: 0.1),
+            ]))
+        }
+    }
+    
+    lazy var resultNode: ResultBoard = {
+        let resultNode = ResultBoard(score: score)
+        resultNode.zPosition = Game.ZPosition.result
+        resultNode.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+        return resultNode
+    }()
+    
     // MARK: - initial the game
     override func didMove(to view: SKView) {
         
         configPhysicalWorld()
         configFloor()
         configBird()
+        
+        addChild(scoreLabelNode)
         
         resetGame()
     }
@@ -129,6 +155,16 @@ class GameScene: SKScene {
         topPipe.physicsBody?.isDynamic = false
         topPipe.physicsBody?.categoryBitMask = Game.Category.pipe
 
+        //
+        let scoreNode = SKNode()
+        scoreNode.name = Game.Key.scoreNodeName
+        scoreNode.position = CGPoint(x: topPipe.position.x + bird.size.width / 2, y: frame.midY)
+        let size = CGSize(width: Game.NodeSize.pipeWidth, height: self.size.height)
+        scoreNode.physicsBody = SKPhysicsBody(rectangleOf: size)
+        scoreNode.physicsBody?.isDynamic = false
+        scoreNode.physicsBody?.categoryBitMask = Game.Category.score
+        scoreNode.physicsBody?.contactTestBitMask = Game.Category.bird
+        
         //创建下水管，每一句方法都与上面创建上水管的相同意义
         let bottomTexture = SKTexture(imageNamed: Game.NodeName.pipeDown)
 
@@ -146,6 +182,7 @@ class GameScene: SKScene {
 
         //将上下水管添加到场景里
         addChild(topPipe)
+        addChild(scoreNode)
         addChild(bottomPipe)
     }
     
@@ -169,7 +206,7 @@ class GameScene: SKScene {
     
     func removeAllPipesNode() {
         //循环检查场景的子节点，同时这个子节点的名字要为pipe
-        for pipe in self.children where pipe.name == Game.Key.pipeName {
+        for pipe in self.children where pipe.name == Game.Key.pipeName || pipe.name == Game.Key.scoreNodeName {
             //将水管这个节点从场景里移除掉
             pipe.removeFromParent()
         }
@@ -179,10 +216,12 @@ class GameScene: SKScene {
     func resetGame() {
         gameState = .ready
         
+        score = 0
         removeAllPipesNode()
         bird.position = CGPoint(x: size.width * 0.5, y: size.height * 0.5)
         bird.physicsBody?.isDynamic = false
         birdStartFly()
+        resultNode.removeFromParent()
     }
     
     func startGame() {
@@ -194,8 +233,21 @@ class GameScene: SKScene {
     func gameOver() {
         gameState = .over
         
+        isUserInteractionEnabled = false
+        
         birdStopFly()
         stopCreateRandomPipesAction()
+        
+        resultNode.score = score
+        addChild(resultNode)
+        let finished = SKAction.run {
+            self.isUserInteractionEnabled = true
+        }
+        resultNode.run(SKAction.sequence([
+            SKAction.scale(to: 1, duration: 0.1),
+            SKAction.scale(to: 1.25, duration: 0.1),
+            finished
+        ]))
     }
     
     func moveScene() {
@@ -214,7 +266,7 @@ class GameScene: SKScene {
         }
         
         //循环检查场景的子节点，同时这个子节点的名字要为pipe
-        for pipeNode in self.children where pipeNode.name == Game.Key.pipeName {
+        for pipeNode in self.children where pipeNode.name == Game.Key.pipeName || pipeNode.name == Game.Key.scoreNodeName {
             
             //因为我们要用到水管的size，但是SKNode没有size属性，所以我们要把它转成SKSpriteNode
             if let pipeSprite = pipeNode as? SKSpriteNode {
@@ -266,8 +318,10 @@ extension GameScene: SKPhysicsContactDelegate {
             bodyB = contact.bodyA
         }
         
-        if (bodyA.categoryBitMask == Game.Category.bird && bodyB.categoryBitMask == Game.Category.floor) ||
-            (bodyA.categoryBitMask == Game.Category.bird && bodyB.categoryBitMask == Game.Category.pipe) {
+        if (bodyA.categoryBitMask & Game.Category.score) == Game.Category.score ||
+            (bodyB.categoryBitMask & Game.Category.score) == Game.Category.score {
+            score += 1
+        } else {
             gameOver()
         }
     }
