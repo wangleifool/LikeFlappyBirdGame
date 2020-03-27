@@ -8,6 +8,7 @@
 
 import SpriteKit
 import GameplayKit
+import AVKit
 
 enum GameState {
     case ready
@@ -24,6 +25,10 @@ class GameScene: SKScene {
     var bird: SKSpriteNode!
     var gameState: GameState = .ready
     
+    let scoreAudioAction = SKAction.playSoundFileNamed(Game.Sound.score, waitForCompletion: false)
+    let gameOverAudioAction = SKAction.playSoundFileNamed(Game.Sound.gameOver, waitForCompletion: false)
+    let gameBgPlayer = createAudioPlayer(name: Game.Sound.bgName, type: Game.Sound.bgFormat)
+    
     lazy var scoreLabelNode: SKLabelNode = {
         let scoreLbl = SKLabelNode(fontNamed: Game.FontName.score)
         scoreLbl.position = CGPoint(x: frame.midX, y: 3 * self.size.height / 4)
@@ -33,6 +38,7 @@ class GameScene: SKScene {
     
     var score = 0 {
         didSet {
+            run(scoreAudioAction)
             scoreLabelNode.text = String(score)
             scoreLabelNode.run(SKAction.sequence([
                 SKAction.scale(to: 1.5, duration: 0.1),
@@ -50,6 +56,8 @@ class GameScene: SKScene {
     
     // MARK: - initial the game
     override func didMove(to view: SKView) {
+        
+        self.gameBgPlayer?.play()
         
         configPhysicalWorld()
         configFloor()
@@ -101,9 +109,12 @@ class GameScene: SKScene {
     // 开始飞
     func birdStartFly() {
 
-        let flyAction = SKAction.animate(with: [SKTexture(imageNamed: Game.NodeName.birdState1),
-                                                SKTexture(imageNamed: Game.NodeName.birdState2),
-                                                SKTexture(imageNamed: Game.NodeName.birdState1)],timePerFrame: 0.15)
+        let altas = SKTextureAtlas(named: "bird")
+        let textureArray = [1, 2, 3, 4, 5, 1]
+            .map { "bat-\($0)" }
+            .map { altas.textureNamed($0) }
+        
+        let flyAction = SKAction.animate(with: textureArray,timePerFrame: 0.2)
 
         bird.run(SKAction.repeatForever(flyAction), withKey: "fly")
 
@@ -235,6 +246,7 @@ class GameScene: SKScene {
         
         isUserInteractionEnabled = false
         
+        run(gameOverAudioAction)
         birdStopFly()
         stopCreateRandomPipesAction()
         
@@ -246,6 +258,7 @@ class GameScene: SKScene {
         resultNode.run(SKAction.sequence([
             SKAction.scale(to: 1, duration: 0.1),
             SKAction.scale(to: 1.25, duration: 0.1),
+            SKAction.wait(forDuration: 1),
             finished
         ]))
     }
@@ -325,4 +338,17 @@ extension GameScene: SKPhysicsContactDelegate {
             gameOver()
         }
     }
+}
+
+// MARK: - tools
+func createAudioPlayer(name : String, type: String) -> AVAudioPlayer? {
+    guard let path = Bundle.main.path(forResource: name,
+                                      ofType: type) else {
+                                        return nil
+    }
+    let assetUrl = URL(fileURLWithPath: path)
+    let player = try? AVAudioPlayer(contentsOf: assetUrl, fileTypeHint: type)
+    player?.prepareToPlay()
+    player?.volume = 0.9
+    return player
 }

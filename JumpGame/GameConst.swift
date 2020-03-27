@@ -62,4 +62,14 @@ enum Game {
         
         static let score = "MarkerFelt-Wide"
     }
+    
+    struct Sound {
+        private init() {}
+        
+        static let bgName = "bg"
+        static let bgFormat = "mp3"
+        
+        static let score = "score.mp3"
+        static let gameOver = "gameOver.mp3"
+    }
 }

@@ -18,6 +18,9 @@
 		3B95D7B12428E24100526FF4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B95D7AF2428E24100526FF4 /* LaunchScreen.storyboard */; };
 		3B95D7B92428E6F600526FF4 /* bird.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 3B95D7B82428E6F600526FF4 /* bird.atlas */; };
 		3B95D7BB2428E81D00526FF4 /* GameConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B95D7BA2428E81D00526FF4 /* GameConst.swift */; };
+		3BDB2896242E18D500EC1AC9 /* score.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB2895242E18D500EC1AC9 /* score.mp3 */; };
+		3BDB2898242E291900EC1AC9 /* bg.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB2897242E291900EC1AC9 /* bg.mp3 */; };
+		3BDB289A242E2FA200EC1AC9 /* gameOver.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB2899242E2FA200EC1AC9 /* gameOver.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +37,9 @@
 		3B95D7B22428E24100526FF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B95D7B82428E6F600526FF4 /* bird.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = bird.atlas; sourceTree = "<group>"; };
 		3B95D7BA2428E81D00526FF4 /* GameConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameConst.swift; sourceTree = "<group>"; };
+		3BDB2895242E18D500EC1AC9 /* score.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = score.mp3; sourceTree = "<group>"; };
+		3BDB2897242E291900EC1AC9 /* bg.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bg.mp3; sourceTree = "<group>"; };
+		3BDB2899242E2FA200EC1AC9 /* gameOver.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gameOver.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,19 +97,46 @@
 		3B95D79F2428E22B00526FF4 /* JumpGame */ = {
 			isa = PBXGroup;
 			children = (
+				3BDB2892242E18AF00EC1AC9 /* Resource */,
 				3B76BBDD242BA55A00F2499B /* Ultils */,
-				3B95D7B82428E6F600526FF4 /* bird.atlas */,
 				3B95D7A02428E22B00526FF4 /* AppDelegate.swift */,
 				3B95D7A62428E22C00526FF4 /* GameScene.swift */,
 				3B95D7A82428E22C00526FF4 /* GameViewController.swift */,
 				3B95D7AA2428E22C00526FF4 /* Main.storyboard */,
-				3B95D7AD2428E24100526FF4 /* Assets.xcassets */,
 				3B95D7AF2428E24100526FF4 /* LaunchScreen.storyboard */,
 				3B95D7B22428E24100526FF4 /* Info.plist */,
 				3B95D7BA2428E81D00526FF4 /* GameConst.swift */,
 				3B76BBDB242BA53300F2499B /* ResultBoard.swift */,
 			);
 			path = JumpGame;
+			sourceTree = "<group>";
+		};
+		3BDB2892242E18AF00EC1AC9 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				3BDB2894242E18BC00EC1AC9 /* image */,
+				3BDB2893242E18B500EC1AC9 /* audio */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		3BDB2893242E18B500EC1AC9 /* audio */ = {
+			isa = PBXGroup;
+			children = (
+				3BDB2895242E18D500EC1AC9 /* score.mp3 */,
+				3BDB2897242E291900EC1AC9 /* bg.mp3 */,
+				3BDB2899242E2FA200EC1AC9 /* gameOver.mp3 */,
+			);
+			path = audio;
+			sourceTree = "<group>";
+		};
+		3BDB2894242E18BC00EC1AC9 /* image */ = {
+			isa = PBXGroup;
+			children = (
+				3B95D7AD2428E24100526FF4 /* Assets.xcassets */,
+				3B95D7B82428E6F600526FF4 /* bird.atlas */,
+			);
+			path = image;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -166,8 +199,11 @@
 			files = (
 				3B95D7AC2428E22C00526FF4 /* Main.storyboard in Resources */,
 				3B95D7AE2428E24100526FF4 /* Assets.xcassets in Resources */,
+				3BDB2896242E18D500EC1AC9 /* score.mp3 in Resources */,
+				3BDB289A242E2FA200EC1AC9 /* gameOver.mp3 in Resources */,
 				3B95D7B92428E6F600526FF4 /* bird.atlas in Resources */,
 				3B95D7B12428E24100526FF4 /* LaunchScreen.storyboard in Resources */,
+				3BDB2898242E291900EC1AC9 /* bg.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,14 +367,16 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P44EYH8J9B;
 				INFOPLIST_FILE = JumpGame/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.leiwang.JumpGame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -349,14 +387,16 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P44EYH8J9B;
 				INFOPLIST_FILE = JumpGame/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.leiwang.JumpGame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
