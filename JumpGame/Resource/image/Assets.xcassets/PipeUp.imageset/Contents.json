@@ -3,6 +3,17 @@
     {
       "filename" : "obstacle.png",
       "idiom" : "universal",
+      "resizing" : {
+        "cap-insets" : {
+          "bottom" : 57,
+          "top" : 57
+        },
+        "center" : {
+          "height" : 1,
+          "mode" : "tile"
+        },
+        "mode" : "3-part-vertical"
+      },
       "scale" : "1x"
     },
     {

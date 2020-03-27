@@ -29,6 +29,7 @@ enum Game {
         static let floorRatio: CGFloat = 1242 / 363
         static let skyRatio: CGFloat = 1242 / 877
         static let pipeRatio: CGFloat = 299 / 848
+        static let resultBoard: CGFloat = 1242 / 1092
     }
     
     struct Key {

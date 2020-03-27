@@ -52,17 +52,17 @@ class ResultBoard: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
 
-    convenience init(score: Int) {
+    convenience init(score: Int, size: CGSize) {
         let scoreTexture = SKTexture(imageNamed: Game.NodeName.scoreboard)
         scoreTexture.filteringMode = .nearest
-        self.init(texture: scoreTexture, color: UIColor.clear, size: scoreTexture.size())
+        self.init(texture: scoreTexture, color: UIColor.clear, size: size)
         addChild(currentScore)
         addChild(bestScore)
         addChild(medal)
         self.score = score
-        currentScore.position = CGPoint(x: frame.midX + 75, y: frame.midY + 20)
-        bestScore.position = CGPoint(x: frame.midX + 75, y: frame.midY - 25)
-        medal.position = CGPoint(x: frame.midX - 64, y: frame.midY - 8)
+        currentScore.position = CGPoint(x: frame.midX + 50, y: frame.midY - 40)
+        bestScore.position = CGPoint(x: frame.midX + 50, y: frame.midY - 82)
+        medal.position = CGPoint(x: frame.midX - 46, y: frame.midY - 74)
     }
 }
 

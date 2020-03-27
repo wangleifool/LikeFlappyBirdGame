@@ -19,6 +19,7 @@
 		3B95D7B12428E24100526FF4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B95D7AF2428E24100526FF4 /* LaunchScreen.storyboard */; };
 		3B95D7B92428E6F600526FF4 /* bird.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 3B95D7B82428E6F600526FF4 /* bird.atlas */; };
 		3B95D7BB2428E81D00526FF4 /* GameConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B95D7BA2428E81D00526FF4 /* GameConst.swift */; };
+		3BA49A68242E8B8B00CFA722 /* 华康海报体W12.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3BA49A67242E8B8B00CFA722 /* 华康海报体W12.ttf */; };
 		3BDB2896242E18D500EC1AC9 /* score.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB2895242E18D500EC1AC9 /* score.mp3 */; };
 		3BDB2898242E291900EC1AC9 /* bg.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB2897242E291900EC1AC9 /* bg.mp3 */; };
 		3BDB289A242E2FA200EC1AC9 /* gameOver.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB2899242E2FA200EC1AC9 /* gameOver.mp3 */; };
@@ -29,7 +30,7 @@
 		3B76BBDB242BA53300F2499B /* ResultBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultBoard.swift; sourceTree = "<group>"; };
 		3B76BBDF242BA5A400F2499B /* UserDefault+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefault+Extension.swift"; sourceTree = "<group>"; };
 		3B76BBE2242BA5F700F2499B /* UserDefaultable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultable.swift; sourceTree = "<group>"; };
-		3B95D79D2428E22B00526FF4 /* JumpGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JumpGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B95D79D2428E22B00526FF4 /* TapRunBat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TapRunBat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B95D7A02428E22B00526FF4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3B95D7A62428E22C00526FF4 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		3B95D7A82428E22C00526FF4 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -39,6 +40,7 @@
 		3B95D7B22428E24100526FF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B95D7B82428E6F600526FF4 /* bird.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = bird.atlas; sourceTree = "<group>"; };
 		3B95D7BA2428E81D00526FF4 /* GameConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameConst.swift; sourceTree = "<group>"; };
+		3BA49A67242E8B8B00CFA722 /* 华康海报体W12.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "华康海报体W12.ttf"; sourceTree = "<group>"; };
 		3BDB2895242E18D500EC1AC9 /* score.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = score.mp3; sourceTree = "<group>"; };
 		3BDB2897242E291900EC1AC9 /* bg.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bg.mp3; sourceTree = "<group>"; };
 		3BDB2899242E2FA200EC1AC9 /* gameOver.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gameOver.mp3; sourceTree = "<group>"; };
@@ -92,7 +94,7 @@
 		3B95D79E2428E22B00526FF4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3B95D79D2428E22B00526FF4 /* JumpGame.app */,
+				3B95D79D2428E22B00526FF4 /* TapRunBat.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -114,9 +116,18 @@
 			path = JumpGame;
 			sourceTree = "<group>";
 		};
+		3BA49A66242E8B7F00CFA722 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				3BA49A67242E8B8B00CFA722 /* 华康海报体W12.ttf */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
 		3BDB2892242E18AF00EC1AC9 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				3BA49A66242E8B7F00CFA722 /* Font */,
 				3BDB2894242E18BC00EC1AC9 /* image */,
 				3BDB2893242E18B500EC1AC9 /* audio */,
 			);
@@ -159,7 +170,7 @@
 			);
 			name = JumpGame;
 			productName = JumpGame;
-			productReference = 3B95D79D2428E22B00526FF4 /* JumpGame.app */;
+			productReference = 3B95D79D2428E22B00526FF4 /* TapRunBat.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -206,6 +217,7 @@
 				3BDB289A242E2FA200EC1AC9 /* gameOver.mp3 in Resources */,
 				3B95D7B92428E6F600526FF4 /* bird.atlas in Resources */,
 				3B95D7B12428E24100526FF4 /* LaunchScreen.storyboard in Resources */,
+				3BA49A68242E8B8B00CFA722 /* 华康海报体W12.ttf in Resources */,
 				3BDB2898242E291900EC1AC9 /* bg.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -378,7 +390,7 @@
 				);
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.leiwang.JumpGame;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = TapRunBat;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -398,7 +410,7 @@
 				);
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.leiwang.JumpGame;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = TapRunBat;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

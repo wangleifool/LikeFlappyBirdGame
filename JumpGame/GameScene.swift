@@ -55,9 +55,11 @@ class GameScene: SKScene {
     }
     
     lazy var resultNode: ResultBoard = {
-        let resultNode = ResultBoard(score: score)
+        let size = CGSize(width: self.size.width - 64,
+                          height: (self.size.width  - 64) / Game.NodeSize.resultBoard)
+        let resultNode = ResultBoard(score: score, size: size)
         resultNode.zPosition = Game.ZPosition.result
-        resultNode.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+        resultNode.position = CGPoint(x: self.frame.midX, y: self.frame.height * 3 / 5)
         return resultNode
     }()
     
