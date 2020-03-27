@@ -22,16 +22,23 @@ class GameScene: SKScene {
     var floor1: SKSpriteNode!
     var floor2: SKSpriteNode!
     
+    var skyNode1: SKSpriteNode!
+    var skyNode2: SKSpriteNode!
+    
     var bird: SKSpriteNode!
     var gameState: GameState = .ready
     
     let scoreAudioAction = SKAction.playSoundFileNamed(Game.Sound.score, waitForCompletion: false)
     let gameOverAudioAction = SKAction.playSoundFileNamed(Game.Sound.gameOver, waitForCompletion: false)
-    let gameBgPlayer = createAudioPlayer(name: Game.Sound.bgName, type: Game.Sound.bgFormat)
-    
+    lazy var gameBgPlayer: AVAudioPlayer? = {
+        let player = createAudioPlayer(name: Game.Sound.bgName, type: Game.Sound.bgFormat)
+        player?.numberOfLoops = -1
+        return player
+    }()
+
     lazy var scoreLabelNode: SKLabelNode = {
         let scoreLbl = SKLabelNode(fontNamed: Game.FontName.score)
-        scoreLbl.position = CGPoint(x: frame.midX, y: 3 * self.size.height / 4)
+        scoreLbl.position = CGPoint(x: frame.midX, y: 4 * self.size.height / 5)
         scoreLbl.zPosition = Game.ZPosition.score
         return scoreLbl
     }()
@@ -61,6 +68,7 @@ class GameScene: SKScene {
         
         configPhysicalWorld()
         configFloor()
+        configSky()
         configBird()
         
         addChild(scoreLabelNode)
@@ -69,10 +77,7 @@ class GameScene: SKScene {
     }
     
     func configPhysicalWorld() {
-        self.backgroundColor = SKColor(red: 80.0/255.0,
-        green: 192.0/255.0,
-        blue: 203.0/255.0,
-        alpha: 1.0)
+        self.backgroundColor = SKColor(hex: 0x65cb99)
         
         //给场景添加一个物理体，这个物理体就是一条沿着场景四周的边，限制了游戏范围，其他物理体就不会跑出这个场景
         physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
@@ -80,17 +85,39 @@ class GameScene: SKScene {
         physicsWorld.gravity = CGVector(dx: 0.0, dy: -5.0)
     }
     
+    func configSky() {
+        let texture = SKTexture(imageNamed: Game.NodeName.sky)
+        let size = CGSize(width: self.size.width, height: self.size.width / Game.NodeSize.skyRatio)
+        skyNode1 = SKSpriteNode(texture: texture, size: size)
+        skyNode1.anchorPoint = .zero
+        skyNode1.position = CGPoint(x: 0, y: floor1.size.height)
+        skyNode1.zPosition = Game.ZPosition.sky
+        addChild(skyNode1)
+        
+        skyNode2 = SKSpriteNode(texture: texture, size: size)
+        skyNode2.anchorPoint = .zero
+        skyNode2.position = CGPoint(x: skyNode1.size.width, y: floor1.size.height)
+        skyNode2.zPosition = Game.ZPosition.sky
+        addChild(skyNode2)
+    }
+    
     func configFloor() {
-        floor1 = SKSpriteNode(imageNamed: Game.NodeName.land)
+        let floorTexture = SKTexture(imageNamed: Game.NodeName.land)
+//        floor1 = SKSpriteNode(imageNamed: Game.NodeName.land)
+        let size = CGSize(width: self.size.width, height: self.size.width / Game.NodeSize.floorRatio)
+        floor1 = SKSpriteNode(texture: floorTexture, size: size)
         floor1.anchorPoint = CGPoint(x: 0, y: 0)
-        floor1.position = CGPoint(x: 0, y: 0)
+        floor1.position = .zero
+        floor1.zPosition = Game.ZPosition.sky
         floor1.physicsBody = SKPhysicsBody(edgeLoopFrom: CGRect(x: 0, y: 0, width: floor1.size.width, height: floor1.size.height))
         floor1.physicsBody?.categoryBitMask = Game.Category.floor
         addChild(floor1)
 
-        floor2 = SKSpriteNode(imageNamed: Game.NodeName.land)
+//        floor2 = SKSpriteNode(imageNamed: Game.NodeName.land)
+        floor2 = SKSpriteNode(texture: floorTexture, size: size)
         floor2.anchorPoint = CGPoint(x: 0, y: 0)
         floor2.position = CGPoint(x: floor1.size.width, y: 0)
+        floor2.zPosition = Game.ZPosition.sky
         floor2.physicsBody = SKPhysicsBody(edgeLoopFrom: CGRect(x: 0, y: 0, width: floor2.size.width, height: floor2.size.height))
         floor2.physicsBody?.categoryBitMask = Game.Category.floor
         addChild(floor2)
@@ -98,6 +125,8 @@ class GameScene: SKScene {
     
     func configBird() {
         bird = SKSpriteNode(imageNamed: Game.NodeName.birdState1)
+        bird.setScale(0.5)
+        bird.zPosition = Game.ZPosition.character
         bird.physicsBody = SKPhysicsBody(texture: bird.texture!, size: bird.size)
         bird.physicsBody?.allowsRotation = false
         bird.physicsBody?.categoryBitMask = Game.Category.bird
@@ -114,7 +143,7 @@ class GameScene: SKScene {
             .map { "bat-\($0)" }
             .map { altas.textureNamed($0) }
         
-        let flyAction = SKAction.animate(with: textureArray,timePerFrame: 0.2)
+        let flyAction = SKAction.animate(with: textureArray,timePerFrame: 0.1)
 
         bird.run(SKAction.repeatForever(flyAction), withKey: "fly")
 
@@ -161,20 +190,11 @@ class GameScene: SKScene {
         //设置上水管的垂直位置为顶部贴着屏幕顶部，水平位置在屏幕右侧之外
         topPipe.position = CGPoint(x: self.size.width + topPipe.size.width * 0.5,
                                    y: self.size.height - topPipe.size.height * 0.5)
+        topPipe.zPosition = Game.ZPosition.pipe
 
         topPipe.physicsBody = SKPhysicsBody(texture: topTexture, size: topSize)
         topPipe.physicsBody?.isDynamic = false
         topPipe.physicsBody?.categoryBitMask = Game.Category.pipe
-
-        //
-        let scoreNode = SKNode()
-        scoreNode.name = Game.Key.scoreNodeName
-        scoreNode.position = CGPoint(x: topPipe.position.x + bird.size.width / 2, y: frame.midY)
-        let size = CGSize(width: Game.NodeSize.pipeWidth, height: self.size.height)
-        scoreNode.physicsBody = SKPhysicsBody(rectangleOf: size)
-        scoreNode.physicsBody?.isDynamic = false
-        scoreNode.physicsBody?.categoryBitMask = Game.Category.score
-        scoreNode.physicsBody?.contactTestBitMask = Game.Category.bird
         
         //创建下水管，每一句方法都与上面创建上水管的相同意义
         let bottomTexture = SKTexture(imageNamed: Game.NodeName.pipeDown)
@@ -186,6 +206,7 @@ class GameScene: SKScene {
         //设置下水管的垂直位置为底部贴着地面的顶部，水平位置在屏幕右侧之外
         bottomPipe.position = CGPoint(x: self.size.width + bottomPipe.size.width * 0.5,
                                       y: self.floor1.size.height + bottomPipe.size.height * 0.5)
+        bottomPipe.zPosition = Game.ZPosition.pipe
         bottomPipe.physicsBody = SKPhysicsBody(texture: bottomTexture, size: bottomSize)
         bottomPipe.physicsBody?.isDynamic = false
         bottomPipe.physicsBody?.categoryBitMask = Game.Category.pipe
@@ -193,7 +214,6 @@ class GameScene: SKScene {
 
         //将上下水管添加到场景里
         addChild(topPipe)
-        addChild(scoreNode)
         addChild(bottomPipe)
     }
     
@@ -201,7 +221,7 @@ class GameScene: SKScene {
         //先计算地板顶部到屏幕顶部的总可用高度
         let height = self.size.height - self.floor1.size.height
         //计算上下管道中间的空档的随机高度，最小为空档高度为2.5倍的小鸟的高度，最大高度为3.5倍的小鸟高度
-        let pipeGap = CGFloat(arc4random_uniform(UInt32(bird.size.height))) + bird.size.height * 2.5
+        let pipeGap = CGFloat(arc4random_uniform(UInt32(bird.size.height))) + bird.size.height * 0.8
 
         //随机计算顶部pipe的随机高度，这个高度肯定要小于(总的可用高度减去空档的高度)
         let topPipeHeight = CGFloat(arc4random_uniform(UInt32(height - pipeGap)))
@@ -217,7 +237,7 @@ class GameScene: SKScene {
     
     func removeAllPipesNode() {
         //循环检查场景的子节点，同时这个子节点的名字要为pipe
-        for pipe in self.children where pipe.name == Game.Key.pipeName || pipe.name == Game.Key.scoreNodeName {
+        for pipe in self.children where pipe.name == Game.Key.pipeName {
             //将水管这个节点从场景里移除掉
             pipe.removeFromParent()
         }
@@ -268,6 +288,8 @@ class GameScene: SKScene {
         //make floor move
         floor1.position = CGPoint(x: floor1.position.x - 1, y: floor1.position.y)
         floor2.position = CGPoint(x: floor2.position.x - 1, y: floor2.position.y)
+        skyNode1.position = CGPoint(x: skyNode1.position.x - 1, y: skyNode1.position.y)
+        skyNode2.position = CGPoint(x: skyNode2.position.x - 1, y: skyNode2.position.y)
 
         //check floor position
         if floor1.position.x < -floor1.size.width {
@@ -278,9 +300,18 @@ class GameScene: SKScene {
             floor2.position = CGPoint(x: floor1.position.x + floor1.size.width, y: floor2.position.y)
         }
         
+        // check sky position
+        if skyNode1.position.x < -skyNode1.size.width {
+            skyNode1.position = CGPoint(x: skyNode2.position.x + skyNode2.size.width, y: skyNode1.position.y)
+        }
+
+        if skyNode2.position.x < -skyNode2.size.width {
+            skyNode2.position = CGPoint(x: skyNode1.position.x + skyNode1.size.width, y: skyNode2.position.y)
+        }
+        
         //循环检查场景的子节点，同时这个子节点的名字要为pipe
-        for pipeNode in self.children where pipeNode.name == Game.Key.pipeName || pipeNode.name == Game.Key.scoreNodeName {
-            
+        var judgeGetScore = false
+        for pipeNode in self.children where pipeNode.name == Game.Key.pipeName {
             //因为我们要用到水管的size，但是SKNode没有size属性，所以我们要把它转成SKSpriteNode
             if let pipeSprite = pipeNode as? SKSpriteNode {
                 //将水管左移1
@@ -291,6 +322,13 @@ class GameScene: SKScene {
                     pipeSprite.removeFromParent()
                 }
 
+                let birdPostionX = bird.position.x
+                let positionGetScoreX = pipeSprite.position.x + Game.NodeSize.pipeWidth * 0.5
+//                print("potion bird: \(birdPostionX), postion get score: \(positionGetScoreX)")
+                if !judgeGetScore, Int(birdPostionX) == Int(positionGetScoreX) {
+                    judgeGetScore = true
+                    score += 1
+                }
             }
         }
 
@@ -331,10 +369,8 @@ extension GameScene: SKPhysicsContactDelegate {
             bodyB = contact.bodyA
         }
         
-        if (bodyA.categoryBitMask & Game.Category.score) == Game.Category.score ||
-            (bodyB.categoryBitMask & Game.Category.score) == Game.Category.score {
-            score += 1
-        } else {
+        if ((bodyA.categoryBitMask == Game.Category.bird) && (bodyB.categoryBitMask == Game.Category.floor)) ||
+            ((bodyA.categoryBitMask == Game.Category.bird) && (bodyB.categoryBitMask == Game.Category.pipe)) {
             gameOver()
         }
     }

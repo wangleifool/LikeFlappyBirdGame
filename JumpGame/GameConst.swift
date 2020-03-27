@@ -17,8 +17,7 @@ enum Game {
         static let sky = "sky"
         static let pipeUp = "PipeDown"
         static let pipeDown = "PipeUp"
-        static let birdState1 = "bird1"
-        static let birdState2 = "bird2"
+        static let birdState1 = "bat-1"
         
         static let scoreboard = "scoreboard"
     }
@@ -27,6 +26,9 @@ enum Game {
         private init() {}
         
         static let pipeWidth: CGFloat = 60
+        static let floorRatio: CGFloat = 1242 / 363
+        static let skyRatio: CGFloat = 1242 / 877
+        static let pipeRatio: CGFloat = 299 / 848
     }
     
     struct Key {
@@ -34,7 +36,6 @@ enum Game {
         
         static let createPipeAction = "createPipe"
         static let pipeName = "pipe"
-        static let scoreNodeName = "scoreNode"
     }
     
     struct Category {
@@ -43,8 +44,6 @@ enum Game {
         static let bird: UInt32 = 0x1 << 0
         static let pipe: UInt32 = 0x1 << 1
         static let floor: UInt32 = 0x1 << 2
-        /// 当玩家通过一次管道，加一次分
-        static let score: UInt32 = 0x1 << 3
     }
     
     struct ZPosition {
@@ -52,6 +51,7 @@ enum Game {
 
         static let sky: CGFloat = -2
         static let pipe: CGFloat = -1
+        static let character: CGFloat = -1
         static let score: CGFloat = 1
         static let result: CGFloat = 2
         static let resultText: CGFloat = 3

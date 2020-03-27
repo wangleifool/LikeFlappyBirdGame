@@ -30,7 +30,7 @@ class GameViewController: UIViewController {
             #if DEBUG
             view.showsFPS = true
             view.showsNodeCount = true
-            view.showsPhysics = true
+//            view.showsPhysics = true
             #endif
         }
     }
