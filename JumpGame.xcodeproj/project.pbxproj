@@ -20,6 +20,7 @@
 		3B95D7B92428E6F600526FF4 /* bird.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 3B95D7B82428E6F600526FF4 /* bird.atlas */; };
 		3B95D7BB2428E81D00526FF4 /* GameConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B95D7BA2428E81D00526FF4 /* GameConst.swift */; };
 		3BA49A6A242F201400CFA722 /* DFPHaiBaoW12.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3BA49A69242F201400CFA722 /* DFPHaiBaoW12.ttf */; };
+		3BA49A6C242FAC7E00CFA722 /* Device+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA49A6B242FAC7E00CFA722 /* Device+Extension.swift */; };
 		3BDB2896242E18D500EC1AC9 /* score.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB2895242E18D500EC1AC9 /* score.mp3 */; };
 		3BDB2898242E291900EC1AC9 /* bg.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB2897242E291900EC1AC9 /* bg.mp3 */; };
 		3BDB289A242E2FA200EC1AC9 /* gameOver.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB2899242E2FA200EC1AC9 /* gameOver.mp3 */; };
@@ -41,6 +42,7 @@
 		3B95D7B82428E6F600526FF4 /* bird.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = bird.atlas; sourceTree = "<group>"; };
 		3B95D7BA2428E81D00526FF4 /* GameConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameConst.swift; sourceTree = "<group>"; };
 		3BA49A69242F201400CFA722 /* DFPHaiBaoW12.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = DFPHaiBaoW12.ttf; sourceTree = "<group>"; };
+		3BA49A6B242FAC7E00CFA722 /* Device+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Device+Extension.swift"; sourceTree = "<group>"; };
 		3BDB2895242E18D500EC1AC9 /* score.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = score.mp3; sourceTree = "<group>"; };
 		3BDB2897242E291900EC1AC9 /* bg.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bg.mp3; sourceTree = "<group>"; };
 		3BDB2899242E2FA200EC1AC9 /* gameOver.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gameOver.mp3; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 			children = (
 				3B76BBDF242BA5A400F2499B /* UserDefault+Extension.swift */,
 				3B1A94D1242E6AF300BC4CF0 /* Color+Extension.swift */,
+				3BA49A6B242FAC7E00CFA722 /* Device+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 				3B95D7A12428E22B00526FF4 /* AppDelegate.swift in Sources */,
 				3B95D7BB2428E81D00526FF4 /* GameConst.swift in Sources */,
 				3B76BBE3242BA5F700F2499B /* UserDefaultable.swift in Sources */,
+				3BA49A6C242FAC7E00CFA722 /* Device+Extension.swift in Sources */,
 				3B1A94D2242E6AF300BC4CF0 /* Color+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

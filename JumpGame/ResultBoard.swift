@@ -60,9 +60,24 @@ class ResultBoard: SKSpriteNode {
         addChild(bestScore)
         addChild(medal)
         self.score = score
-        currentScore.position = CGPoint(x: frame.midX + 50, y: frame.midY - 40)
-        bestScore.position = CGPoint(x: frame.midX + 50, y: frame.midY - 82)
-        medal.position = CGPoint(x: frame.midX - 46, y: frame.midY - 74)
+        
+        if UIDevice.isIPhoneX {
+            currentScore.position = CGPoint(x: frame.midX + 63, y: frame.midY - 46)
+            bestScore.position = CGPoint(x: frame.midX + 63, y: frame.midY - 100)
+            medal.position = CGPoint(x: frame.midX - 62, y: frame.midY - 92)
+        } else if UIDevice.isIPhoneSE {
+            currentScore.position = CGPoint(x: frame.midX + 50, y: frame.midY - 40)
+            bestScore.position = CGPoint(x: frame.midX + 50, y: frame.midY - 82)
+            medal.position = CGPoint(x: frame.midX - 46, y: frame.midY - 74)
+        } else if UIDevice.isIPhone8 {
+            currentScore.position = CGPoint(x: frame.midX + 55, y: frame.midY - 46)
+            bestScore.position = CGPoint(x: frame.midX + 55, y: frame.midY - 96)
+            medal.position = CGPoint(x: frame.midX - 56, y: frame.midY - 84)
+        } else {
+            currentScore.position = CGPoint(x: frame.midX + 63, y: frame.midY - 46)
+            bestScore.position = CGPoint(x: frame.midX + 63, y: frame.midY - 100)
+            medal.position = CGPoint(x: frame.midX - 62, y: frame.midY - 92)
+        }
     }
 }
 
