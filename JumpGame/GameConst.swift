@@ -62,6 +62,7 @@ enum Game {
         private init() {}
         
         static let score = "MarkerFelt-Wide"
+        static let title = "DFPHaiBaoW12"
     }
     
     struct Sound {

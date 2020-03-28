@@ -35,6 +35,16 @@ class GameScene: SKScene {
         player?.numberOfLoops = -1
         return player
     }()
+    
+    lazy var titleLabelNode: SKLabelNode = {
+        let titleLbl = SKLabelNode(fontNamed: Game.FontName.title)
+        titleLbl.text = "Tap Run Bat"
+        titleLbl.fontColor = .darkText
+        titleLbl.fontSize = 40
+        titleLbl.position = CGPoint(x: frame.midX, y: 7 * self.size.height / 10)
+        titleLbl.zPosition = Game.ZPosition.score
+        return titleLbl
+    }()
 
     lazy var scoreLabelNode: SKLabelNode = {
         let scoreLbl = SKLabelNode(fontNamed: Game.FontName.score)
@@ -72,8 +82,6 @@ class GameScene: SKScene {
         configFloor()
         configSky()
         configBird()
-        
-        addChild(scoreLabelNode)
         
         resetGame()
     }
@@ -134,6 +142,37 @@ class GameScene: SKScene {
         bird.physicsBody?.categoryBitMask = Game.Category.bird
         bird.physicsBody?.contactTestBitMask = Game.Category.floor | Game.Category.pipe
         addChild(bird)
+    }
+    
+    func showTitleBoard() {
+        addChild(titleLabelNode)
+        titleLabelNode.run(SKAction.sequence([
+            SKAction.scale(to: 1.25, duration: 0.2),
+            SKAction.scale(to: 0.85, duration: 0.2),
+            SKAction.scale(to: 1, duration: 0.2)
+        ]))
+    }
+    
+    func hideTitleBoard() {
+        titleLabelNode.run(SKAction.scale(to: 0.01, duration: 0.2)) { [weak self] in
+            self?.titleLabelNode.removeFromParent()
+        }
+    }
+    
+    func showResultBoard() {
+        resultNode.score = score
+        addChild(resultNode)
+
+        resultNode.run(SKAction.sequence([
+            SKAction.scale(to: 1, duration: 0.1),
+            SKAction.scale(to: 1.25, duration: 0.1),
+        ])) { [weak self] in
+            self?.isUserInteractionEnabled = true
+        }
+    }
+    
+    func hideResultBoard() {
+        resultNode.removeFromParent()
     }
     
     // MARK: - about bird
@@ -249,16 +288,20 @@ class GameScene: SKScene {
     func resetGame() {
         gameState = .ready
         
-        score = 0
+        showTitleBoard()
+        hideResultBoard()
+        
         removeAllPipesNode()
         bird.position = CGPoint(x: size.width * 0.5, y: size.height * 0.5)
         bird.physicsBody?.isDynamic = false
         birdStartFly()
-        resultNode.removeFromParent()
     }
     
     func startGame() {
         gameState = .running
+        hideTitleBoard()
+        score = 0
+        addChild(scoreLabelNode)
         bird.physicsBody?.isDynamic = true
         startCreateRandomPipesAction()
     }
@@ -268,21 +311,23 @@ class GameScene: SKScene {
         
         isUserInteractionEnabled = false
         
+        scoreLabelNode.removeFromParent()
         run(gameOverAudioAction)
         birdStopFly()
         stopCreateRandomPipesAction()
         
-        resultNode.score = score
-        addChild(resultNode)
-        let finished = SKAction.run {
-            self.isUserInteractionEnabled = true
-        }
-        resultNode.run(SKAction.sequence([
-            SKAction.scale(to: 1, duration: 0.1),
-            SKAction.scale(to: 1.25, duration: 0.1),
-            SKAction.wait(forDuration: 1),
-            finished
-        ]))
+        showResultBoard()
+//        resultNode.score = score
+//        addChild(resultNode)
+//        let finished = SKAction.run {
+//            self.isUserInteractionEnabled = true
+//        }
+//        resultNode.run(SKAction.sequence([
+//            SKAction.scale(to: 1, duration: 0.1),
+//            SKAction.scale(to: 1.25, duration: 0.1),
+//            SKAction.wait(forDuration: 1),
+//            finished
+//        ]))
     }
     
     func moveScene() {

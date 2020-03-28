@@ -19,7 +19,7 @@
 		3B95D7B12428E24100526FF4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B95D7AF2428E24100526FF4 /* LaunchScreen.storyboard */; };
 		3B95D7B92428E6F600526FF4 /* bird.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 3B95D7B82428E6F600526FF4 /* bird.atlas */; };
 		3B95D7BB2428E81D00526FF4 /* GameConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B95D7BA2428E81D00526FF4 /* GameConst.swift */; };
-		3BA49A68242E8B8B00CFA722 /* 华康海报体W12.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3BA49A67242E8B8B00CFA722 /* 华康海报体W12.ttf */; };
+		3BA49A6A242F201400CFA722 /* DFPHaiBaoW12.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3BA49A69242F201400CFA722 /* DFPHaiBaoW12.ttf */; };
 		3BDB2896242E18D500EC1AC9 /* score.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB2895242E18D500EC1AC9 /* score.mp3 */; };
 		3BDB2898242E291900EC1AC9 /* bg.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB2897242E291900EC1AC9 /* bg.mp3 */; };
 		3BDB289A242E2FA200EC1AC9 /* gameOver.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB2899242E2FA200EC1AC9 /* gameOver.mp3 */; };
@@ -40,7 +40,7 @@
 		3B95D7B22428E24100526FF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B95D7B82428E6F600526FF4 /* bird.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = bird.atlas; sourceTree = "<group>"; };
 		3B95D7BA2428E81D00526FF4 /* GameConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameConst.swift; sourceTree = "<group>"; };
-		3BA49A67242E8B8B00CFA722 /* 华康海报体W12.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "华康海报体W12.ttf"; sourceTree = "<group>"; };
+		3BA49A69242F201400CFA722 /* DFPHaiBaoW12.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = DFPHaiBaoW12.ttf; sourceTree = "<group>"; };
 		3BDB2895242E18D500EC1AC9 /* score.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = score.mp3; sourceTree = "<group>"; };
 		3BDB2897242E291900EC1AC9 /* bg.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bg.mp3; sourceTree = "<group>"; };
 		3BDB2899242E2FA200EC1AC9 /* gameOver.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gameOver.mp3; sourceTree = "<group>"; };
@@ -119,7 +119,7 @@
 		3BA49A66242E8B7F00CFA722 /* Font */ = {
 			isa = PBXGroup;
 			children = (
-				3BA49A67242E8B8B00CFA722 /* 华康海报体W12.ttf */,
+				3BA49A69242F201400CFA722 /* DFPHaiBaoW12.ttf */,
 			);
 			path = Font;
 			sourceTree = "<group>";
@@ -215,9 +215,9 @@
 				3B95D7AE2428E24100526FF4 /* Assets.xcassets in Resources */,
 				3BDB2896242E18D500EC1AC9 /* score.mp3 in Resources */,
 				3BDB289A242E2FA200EC1AC9 /* gameOver.mp3 in Resources */,
+				3BA49A6A242F201400CFA722 /* DFPHaiBaoW12.ttf in Resources */,
 				3B95D7B92428E6F600526FF4 /* bird.atlas in Resources */,
 				3B95D7B12428E24100526FF4 /* LaunchScreen.storyboard in Resources */,
-				3BA49A68242E8B8B00CFA722 /* 华康海报体W12.ttf in Resources */,
 				3BDB2898242E291900EC1AC9 /* bg.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
