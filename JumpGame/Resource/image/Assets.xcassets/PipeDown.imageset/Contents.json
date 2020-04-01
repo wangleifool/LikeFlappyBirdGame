@@ -1,15 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "obstacle.png",
+      "filename" : "PipeDown.png",
       "idiom" : "universal",
       "resizing" : {
         "cap-insets" : {
-          "bottom" : 57,
-          "top" : 57
+          "bottom" : 38,
+          "top" : 107
         },
         "center" : {
-          "height" : 1,
+          "height" : 5,
           "mode" : "tile"
         },
         "mode" : "3-part-vertical"

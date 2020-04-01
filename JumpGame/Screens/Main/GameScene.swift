@@ -221,6 +221,7 @@ class GameScene: SKScene {
 
         //创建上水管
         let topTexture = SKTexture(imageNamed: Game.NodeName.pipeUp)
+        topTexture.filteringMode = .nearest
         
         //利用上水管图片创建一个上水管纹理对象
         let topPipe = SKSpriteNode(texture: topTexture, size: topSize)
@@ -265,10 +266,15 @@ class GameScene: SKScene {
         let pipeGap = CGFloat(arc4random_uniform(UInt32(bird.size.height))) + bird.size.height * 0.8
 
         //随机计算顶部pipe的随机高度，这个高度肯定要小于(总的可用高度减去空档的高度)
-        let topPipeHeight = CGFloat(arc4random_uniform(UInt32(height - pipeGap)))
+        var topPipeHeight = CGFloat(arc4random_uniform(UInt32(height - pipeGap)))
+        topPipeHeight = topPipeHeight >= 80 ? topPipeHeight : topPipeHeight + 80
 
         //总可用高度减去空档gap高度减去顶部水管topPipe高度剩下就为底部的bottomPipe高度
-        let bottomPipeHeight = height - pipeGap - topPipeHeight
+        var bottomPipeHeight = height - pipeGap - topPipeHeight
+        if bottomPipeHeight < 80 {
+            bottomPipeHeight = bottomPipeHeight + 80
+            topPipeHeight = height - pipeGap - bottomPipeHeight
+        }
 
         //调用添加水管到场景方法
         addPipes(topSize: CGSize(width: Game.NodeSize.pipeWidth, height: topPipeHeight),

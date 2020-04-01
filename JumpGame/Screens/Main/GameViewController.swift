@@ -12,6 +12,10 @@ import GameplayKit
 
 class GameViewController: UIViewController {
 
+    static func instance() -> GameViewController {
+        return GameViewController.initFromStoryboard(name: "Main")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,8 +32,8 @@ class GameViewController: UIViewController {
             view.ignoresSiblingOrder = true
             
             #if DEBUG
-            view.showsFPS = true
-            view.showsNodeCount = true
+//            view.showsFPS = true
+//            view.showsNodeCount = true
 //            view.showsPhysics = true
             #endif
         }
