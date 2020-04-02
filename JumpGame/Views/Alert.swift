@@ -2,8 +2,8 @@
 //  Alert.swift
 //  WhoTapFast
 //
-//  Created by Shi Li on 2020/3/14.
-//  Copyright © 2020 wanglei. All rights reserved.
+//  Created by JackSen on 2020/3/14.
+//  Copyright © 2020 JackSen. All rights reserved.
 //
 
 import Foundation

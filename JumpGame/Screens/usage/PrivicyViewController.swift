@@ -2,8 +2,8 @@
 //  AppUsageViewController.swift
 //  WhoTapFast
 //
-//  Created by Shi Li on 2020/3/19.
-//  Copyright © 2020 wanglei. All rights reserved.
+//  Created by JackSen on 2020/3/19.
+//  Copyright © 2020 JackSen. All rights reserved.
 //
 
 import UIKit
@@ -192,6 +192,12 @@ extension PrivicyViewController: WKNavigationDelegate {
             return
         }
         
+        if (url.scheme == "mqqwpa") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            decisionHandler(.cancel)
+            return
+        }
+
         let isMaybeUrlScheme = !(url.scheme ?? "").contains("http")
         
         if !needOpenBySafari,

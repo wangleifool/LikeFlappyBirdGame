@@ -2,8 +2,8 @@
 //  UserDefault+Extension.swift
 //  JumpGame
 //
-//  Created by lei wang on 2020/3/25.
-//  Copyright © 2020 lei wang. All rights reserved.
+//  Created by JackSen on 2020/3/25.
+//  Copyright © 2020 JackSen. All rights reserved.
 //
 
 import Foundation
