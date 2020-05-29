@@ -12,6 +12,9 @@ target 'JumpGame' do
   # Network
   pod 'Moya/RxSwift', '13.0.1'
   pod 'Alamofire', '4.8.2'
+
+  # payment
+  pod 'SwiftyStoreKit'
   
   # Push
   pod 'JPush', '3.1.0'

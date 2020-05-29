@@ -13,6 +13,7 @@ struct APIService {
 
     private static let manager: Manager = {
         let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 10
         configuration.httpAdditionalHeaders = Manager.defaultHTTPHeaders
         let mgr = Manager.default
         mgr.startRequestsImmediately = false

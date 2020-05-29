@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		380787580A7BBAAB9A4C8587 /* Pods_JumpGame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 897270C3068FFBA9334F4AFB /* Pods_JumpGame.framework */; };
 		3B1A94D2242E6AF300BC4CF0 /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1A94D1242E6AF300BC4CF0 /* Color+Extension.swift */; };
+		3B5AF1982480A4FD00F4CC1C /* InterAppPaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5AF1972480A4FD00F4CC1C /* InterAppPaymentService.swift */; };
 		3B76BBDC242BA53300F2499B /* ResultBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B76BBDB242BA53300F2499B /* ResultBoard.swift */; };
 		3B76BBE0242BA5A400F2499B /* UserDefault+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B76BBDF242BA5A400F2499B /* UserDefault+Extension.swift */; };
 		3B76BBE3242BA5F700F2499B /* UserDefaultable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B76BBE2242BA5F700F2499B /* UserDefaultable.swift */; };
@@ -51,6 +52,7 @@
 
 /* Begin PBXFileReference section */
 		3B1A94D1242E6AF300BC4CF0 /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
+		3B5AF1972480A4FD00F4CC1C /* InterAppPaymentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterAppPaymentService.swift; sourceTree = "<group>"; };
 		3B76BBDB242BA53300F2499B /* ResultBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultBoard.swift; sourceTree = "<group>"; };
 		3B76BBDF242BA5A400F2499B /* UserDefault+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefault+Extension.swift"; sourceTree = "<group>"; };
 		3B76BBE2242BA5F700F2499B /* UserDefaultable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultable.swift; sourceTree = "<group>"; };
@@ -117,6 +119,14 @@
 				F335DDDFCE285CAFF5F27E81 /* Pods-JumpGame.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		3B5AF1962480A4E000F4CC1C /* IAP */ = {
+			isa = PBXGroup;
+			children = (
+				3B5AF1972480A4FD00F4CC1C /* InterAppPaymentService.swift */,
+			);
+			path = IAP;
 			sourceTree = "<group>";
 		};
 		3B76BBDD242BA55A00F2499B /* Ultils */ = {
@@ -297,6 +307,7 @@
 		D73D395B2434F83800C0076B /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				3B5AF1962480A4E000F4CC1C /* IAP */,
 				D73D396E2434F8B700C0076B /* AppError.swift */,
 				D73D396F2434F8B700C0076B /* Rx+Codable.swift */,
 				D73D39712434F8B700C0076B /* Response+Codable.swift */,
@@ -448,6 +459,7 @@
 				D73D39452434F53000C0076B /* GameViewController.swift in Sources */,
 				3BA49A6C242FAC7E00CFA722 /* Device+Extension.swift in Sources */,
 				D73D39782434F8CE00C0076B /* GCD.swift in Sources */,
+				3B5AF1982480A4FD00F4CC1C /* InterAppPaymentService.swift in Sources */,
 				3B1A94D2242E6AF300BC4CF0 /* Color+Extension.swift in Sources */,
 				D73D39492434F5DF00C0076B /* AppVersion.swift in Sources */,
 				D73D394B2434F60D00C0076B /* BaseViewController.swift in Sources */,
@@ -605,7 +617,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = JumpGame/TapRunBat.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = P44EYH8J9B;
 				INFOPLIST_FILE = JumpGame/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -631,7 +643,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = JumpGame/TapRunBat.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = P44EYH8J9B;
 				INFOPLIST_FILE = JumpGame/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;

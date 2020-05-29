@@ -13,6 +13,7 @@ PODS:
   - RxCocoa (4.5.0):
     - RxSwift (>= 4.4.2, ~> 4.4)
   - RxSwift (4.5.0)
+  - SwiftyStoreKit (0.15.0)
 
 DEPENDENCIES:
   - Alamofire (= 4.8.2)
@@ -20,6 +21,7 @@ DEPENDENCIES:
   - Moya/RxSwift (= 13.0.1)
   - RxCocoa (= 4.5.0)
   - RxSwift (= 4.5.0)
+  - SwiftyStoreKit
 
 SPEC REPOS:
   trunk:
@@ -30,6 +32,7 @@ SPEC REPOS:
     - Result
     - RxCocoa
     - RxSwift
+    - SwiftyStoreKit
 
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
@@ -39,7 +42,8 @@ SPEC CHECKSUMS:
   Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
   RxCocoa: cbf70265dc65a981d4ac982e513c10cf23df24a0
   RxSwift: f172070dfd1a93d70a9ab97a5a01166206e1c575
+  SwiftyStoreKit: 033d06b6f87955405d3f844a18a7687c2438592a
 
-PODFILE CHECKSUM: b1ddb4473a5c18e47c228662172bee4780904168
+PODFILE CHECKSUM: ffa574df13d063e7ede24bce489dc14f1e914c36
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.2

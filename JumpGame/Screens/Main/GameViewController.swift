@@ -19,24 +19,36 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let view = self.view as! SKView? {
-            
-            let scene = GameScene(size: view.bounds.size)
-            
-            // Set the scale mode to scale to fit the window
-            scene.scaleMode = .aspectFill
-                           
-            // Present the scene
-            view.presentScene(scene)
-            
-            view.ignoresSiblingOrder = true
-            
-            #if DEBUG
-//            view.showsFPS = true
-//            view.showsNodeCount = true
-//            view.showsPhysics = true
-            #endif
-        }
+//        if let view = self.view as! SKView? {
+//
+//            let scene = GameScene(size: view.bounds.size)
+//
+//            // Set the scale mode to scale to fit the window
+//            scene.scaleMode = .aspectFil
+//
+//            // Present the scene
+//            view.presentScene(scene)
+//
+//            view.ignoresSiblingOrder = true
+//
+//            #if DEBUG
+////            view.showsFPS = true
+////            view.showsNodeCount = true
+////            view.showsPhysics = true
+//            #endif
+//        }
+        view.backgroundColor = .red
+        testIAP()
+    }
+    
+    func testIAP() {
+//        InterAppPaymentService.shared.retrieveProductsInfo()
+        
+//        InterAppPaymentService.shared.verifyReceipt(product: .tenLifesPerMonth)
+//        
+        InterAppPaymentService.shared.purchaseProduct(.tenLifesPerMonth)
+//        
+//        InterAppPaymentService.shared.verifyReceipt(product: .tenLifesPerMonth)
     }
 
     override var shouldAutorotate: Bool {
