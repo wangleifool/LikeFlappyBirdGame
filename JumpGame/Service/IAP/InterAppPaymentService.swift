@@ -7,7 +7,9 @@
 //
 
 import Foundation
+import StoreKit
 import SwiftyStoreKit
+import RxSwift
 
 enum AppStoreProductType {
     /// 消耗型项目
@@ -70,130 +72,173 @@ struct InterAppPaymentService {
     private init() {}
     
     /// 获取在售产品信息
-    func retrieveProductsInfo() {
-        let productsIds = AppStoreProducts.allCases.map { $0.productID }
-        SwiftyStoreKit.retrieveProductsInfo(Set(productsIds)) { (result) in
-            if let product = result.retrievedProducts.first {
-                let priceString = product.localizedPrice!
-                print("Product: \(product.localizedDescription), price: \(priceString)")
+    func retrieveProductsInfo(_ product: [AppStoreProducts]) -> Single<Set<SKProduct>> {
+        return Single<Set<SKProduct>>.create { (single) -> Disposable in
+            let productsIds = product.map { $0.productID }
+            SwiftyStoreKit.retrieveProductsInfo(Set(productsIds)) { (result) in
+                if let _ = result.retrievedProducts.first {
+                    single(.success(result.retrievedProducts))
+                }
+                else if let _ = result.invalidProductIDs.first {
+                    single(.error(AppError.IAPError.invalidProductID))
+                }
+                else {
+                    single(.error(result.error!))
+                    print("Error: \(String(describing: result.error))")
+                }
             }
-            else if let invalidProductId = result.invalidProductIDs.first {
-                print("Invalid product identifier: \(invalidProductId)")
-            }
-            else {
-                print("Error: \(String(describing: result.error))")
-            }
+            
+            return Disposables.create()
         }
     }
     
-    /// 购买商品
-    func purchaseProduct(_ product: AppStoreProducts) {
-        SwiftyStoreKit.purchaseProduct(product.productID, atomically: true) { result in
-        
-            switch result {
-            case .success(let purchase):
-                // Deliver content from server, then:
-                if purchase.needsFinishTransaction {
-                    SwiftyStoreKit.finishTransaction(purchase.transaction)
-                }
-                
-                let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: "your-shared-secret")
-                SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
+    /// 购买并且验证收据
+    func purchaseAndConfirm(product: AppStoreProducts) -> Single<Void> {
+        return purchaseProduct(product)
+            .flatMap { self.verifyReceipt(product: product) }
+    }
+    
+    /// 只是购买商品
+    func purchaseProduct(_ product: AppStoreProducts) -> Single<Void> {
+        return Single<Void>.create { (single) -> Disposable in
+            
+            SwiftyStoreKit.purchaseProduct(product.productID, atomically: true) { result in
+                switch result {
+                case .success(let purchase):
+                    // Deliver content from server, then:
+                    if purchase.needsFinishTransaction {
+                        SwiftyStoreKit.finishTransaction(purchase.transaction)
+                    }
+                    single(.success(()))
                     
-                    if case .success(let receipt) = result {
-                        let purchaseResult = SwiftyStoreKit.verifySubscription(
-                            ofType: .autoRenewable,
-                            productId: product.productID,
-                            inReceipt: receipt)
-                        
-                        switch purchaseResult {
-                        case .purchased(let expiryDate, let receiptItems):
-                            print("Product is valid until \(expiryDate)")
-                        case .expired(let expiryDate, let receiptItems):
-                            print("Product is expired since \(expiryDate)")
-                        case .notPurchased:
-                            print("This product has never been purchased")
-                        }
-
-                    } else {
-                        // receipt verification error
+                case .error(let error):
+                    switch error.code {
+                    case .paymentCancelled:
+                        single(.error(AppError.IAPError.cancelled))
+                    case .paymentInvalid:
+                        single(.error(AppError.IAPError.invalidProductID))
+                    case .cloudServiceNetworkConnectionFailed:
+                        single(.error(AppError.IAPError.notConnectedToInternet))
+                    default:
+                        single(.error(AppError.IAPError.unknown))
                     }
                 }
-            case .error(let error):
-                switch error.code {
-                case .unknown:
-                    print("Unknown error. Please contact support")
-                case .clientInvalid:
-                    print("Not allowed to make the payment")
-                case .paymentCancelled:
-                    break
-                case .paymentInvalid:
-                    print("The purchase identifier was invalid")
-                case .paymentNotAllowed:
-                    print("The device is not allowed to make the payment")
-                case .storeProductNotAvailable:
-                    print("The product is not available in the current storefront")
-                case .cloudServicePermissionDenied:
-                    print("Access to cloud service information is not allowed")
-                case .cloudServiceNetworkConnectionFailed:
-                    print("Could not connect to the network")
-                case .cloudServiceRevoked:
-                    print("User has revoked permission to use this cloud service")
-                case .privacyAcknowledgementRequired:
-                    print("privacyAcknowledgementRequired")
-                case .unauthorizedRequestData:
-                    print("unauthorizedRequestData")
-                case .invalidOfferIdentifier:
-                    print("invalidOfferIdentifier")
-                case .invalidSignature:
-                    print("invalidSignature")
-                case .missingOfferParams:
-                    print("missingOfferParams")
-                case .invalidOfferPrice:
-                    print("invalidOfferPrice")
-                @unknown default:
-                    break
             }
-            }
+            
+            return Disposables.create()
         }
     }
     
-    func verifyReceipt(product: AppStoreProducts) {
-        var service: AppleReceiptValidator.VerifyReceiptURLType = .production
-        #if DEBUG
-        service = .sandbox
-        #endif
-        let appleValidator = AppleReceiptValidator(service: service, sharedSecret: product.type.sharedSecret)
-        SwiftyStoreKit.verifyReceipt(using: appleValidator) { (result) in
-            switch result {
-            case .success(let receipt):
-                if product.type == .autoRenewSubscription || product.type == .nonAutoRenewSubscription {
-                    let type: SubscriptionType = product.type == .autoRenewSubscription ? .autoRenewable : .nonRenewing(validDuration: product.validDuration)
-                    let purchaseResult = SwiftyStoreKit.verifySubscription(ofType: type,
-                                                                           productId: product.productID,
-                                                                           inReceipt: receipt)
-                    switch purchaseResult {
-                    case .purchased(let expiryDate, let receiptItems):
-                        print("Product is valid until \(expiryDate)")
-                    case .expired(let expiryDate, let receiptItems):
-                        print("Product is expired since \(expiryDate)")
-                    case .notPurchased:
-                        print("This product has never been purchased")
+    private func checkVerifyResult(product: AppStoreProducts, result: (VerifySubscriptionResult?,VerifyPurchaseResult?)) -> Single<Void> {
+        switch product.type {
+        case .autoRenewSubscription, .nonAutoRenewSubscription:
+            if let subscribeResult = result.0 {
+                switch subscribeResult {
+                case .purchased(_, let items):
+                    guard let _ = items.first(where: { $0.productId == product.productID }) else {
+                        return Single.error(AppError.IAPError.invalidProductID)
                     }
-                } else {
-                    let purchaseResult = SwiftyStoreKit.verifyPurchase(productId: product.productID, inReceipt: receipt)
-                        
-                    switch purchaseResult {
-                    case .purchased(let receiptItem):
-                        print("\(product.productID) is purchased: \(receiptItem)")
-                    case .notPurchased:
-                        print("The user has never purchased \(product.productID)")
-                    }
-                    print("Verify receipt success: \(receipt)")
+                case .expired:
+                    return Single.error(AppError.IAPError.expired)
+                case .notPurchased:
+                    return Single.error(AppError.IAPError.notPurchased)
                 }
-            case .error(let error):
-                print("Verify receipt fail: \(error)")
+            } else {
+                return Single.error(AppError.IAPError.unknown)
             }
+            
+        case .consumable, .nonconsumable:
+            if let purchaseResult = result.1 {
+                switch purchaseResult {
+                case .notPurchased:
+                    return Single.error(AppError.IAPError.notPurchased)
+                case .purchased(let item):
+                    guard item.productId == product.productID else {
+                        return Single.error(AppError.IAPError.invalidProductID)
+                    }
+                }
+            } else {
+                return Single.error(AppError.IAPError.unknown)
+            }
+        }
+        return Single.just(())
+    }
+    
+    /// 验证收据, 指定要验证的产品，如果成功 得到成功事件，如果失败得到错误事件
+    public func verifyReceipt(product: AppStoreProducts) -> Single<Void> {
+        return verifyReceipt(product: product)
+            .flatMap { self.checkVerifyResult(product: product, result: $0) }
+    }
+    
+    /// 验证收据, 指定要验证的产品，返回验证临时结果
+    private func verifyReceipt(product: AppStoreProducts) -> Single<(VerifySubscriptionResult?,VerifyPurchaseResult?)> {
+        return Single<(VerifySubscriptionResult?,VerifyPurchaseResult?)>.create { (single) -> Disposable in
+            
+            var service: AppleReceiptValidator.VerifyReceiptURLType = .production
+            #if DEBUG
+            service = .sandbox
+            #endif
+            let appleValidator = AppleReceiptValidator(service: service, sharedSecret: product.type.sharedSecret)
+            
+            SwiftyStoreKit.verifyReceipt(using: appleValidator) { (result) in
+                switch result {
+                case .success(let receipt):
+                    if product.type == .autoRenewSubscription || product.type == .nonAutoRenewSubscription {
+                        let type: SubscriptionType = product.type == .autoRenewSubscription ? .autoRenewable : .nonRenewing(validDuration: product.validDuration)
+                        let subscribeResult = SwiftyStoreKit.verifySubscription(ofType: type,
+                                                                               productId: product.productID,
+                                                                               inReceipt: receipt)
+                        single(.success((subscribeResult, nil)))
+                    } else {
+                        let purchaseResult = SwiftyStoreKit.verifyPurchase(productId: product.productID, inReceipt: receipt)
+                        single(.success((nil, purchaseResult)))
+                    }
+                case .error(let error):
+                    single(.error(error))
+                }
+            }
+            
+            return Disposables.create()
+        }
+    }
+}
+
+extension InterAppPaymentService {
+    func dealSKError(_ error: SKError) {
+        switch error.code {
+        case .unknown:
+            print("Unknown error. Please contact support")
+        case .clientInvalid:
+            print("Not allowed to make the payment")
+        case .paymentCancelled:
+            break
+        case .paymentInvalid:
+            print("The purchase identifier was invalid")
+        case .paymentNotAllowed:
+            print("The device is not allowed to make the payment")
+        case .storeProductNotAvailable:
+            print("The product is not available in the current storefront")
+        case .cloudServicePermissionDenied:
+            print("Access to cloud service information is not allowed")
+        case .cloudServiceNetworkConnectionFailed:
+            print("Could not connect to the network")
+        case .cloudServiceRevoked:
+            print("User has revoked permission to use this cloud service")
+        case .privacyAcknowledgementRequired:
+            print("privacyAcknowledgementRequired")
+        case .unauthorizedRequestData:
+            print("unauthorizedRequestData")
+        case .invalidOfferIdentifier:
+            print("invalidOfferIdentifier")
+        case .invalidSignature:
+            print("invalidSignature")
+        case .missingOfferParams:
+            print("missingOfferParams")
+        case .invalidOfferPrice:
+            print("invalidOfferPrice")
+        @unknown default:
+            break
+
         }
     }
 }

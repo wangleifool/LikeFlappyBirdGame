@@ -16,6 +16,15 @@ enum AppError: Error {
         case unknown
         case statusCode(code: Int)
     }
+    
+    enum IAPError: Error {
+        case unknown
+        case invalidProductID
+        case notPurchased
+        case expired
+        case notConnectedToInternet
+        case cancelled
+    }
 
     case api(response: APIErrorResponse)
     case net(_ error: Network)
