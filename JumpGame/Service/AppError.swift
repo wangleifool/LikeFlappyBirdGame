@@ -24,6 +24,9 @@ enum AppError: Error {
         case expired
         case notConnectedToInternet
         case cancelled
+        
+        case restorePurchaseFail
+        case nothingCanRestore
     }
 
     case api(response: APIErrorResponse)

@@ -15,6 +15,10 @@ class GameViewController: UIViewController {
 
     var disposeBag = DisposeBag()
     
+    private var purchaseBtn: UIButton?
+    private var restoreBtn: UIButton?
+    private var checkSubscription: UIButton?
+    
     static func instance() -> GameViewController {
         return GameViewController.initFromStoryboard(name: "Main")
     }
@@ -41,10 +45,65 @@ class GameViewController: UIViewController {
 //            #endif
 //        }
         view.backgroundColor = .red
-        testIAP()
+//        testRetieveInfo()
+        
+        addTestInAppPurchaseUI()
+        
     }
     
-    func testIAP() {
+    func addTestInAppPurchaseUI() {
+        let testBtn = UIButton(frame: CGRect(x: 150, y: 100, width: 100, height: 80))
+        testBtn.setTitle("Purchase", for: .normal)
+        testBtn.setTitleColor(.systemBlue, for: .normal)
+        view.addSubview(testBtn)
+        self.purchaseBtn = testBtn
+        testBtn.rx.tap
+            .asDriver()
+            .debounce(0.2)
+            .drive(onNext: { [weak self] _ in
+                self?.testPurchase()
+            })
+            .disposed(by: disposeBag)
+        
+        let checkBtn = UIButton(frame: CGRect(x: 150, y: 150, width: 150, height: 80))
+        checkBtn.setTitle("Check Subscription", for: .normal)
+        checkBtn.setTitleColor(.systemBlue, for: .normal)
+        view.addSubview(checkBtn)
+        self.checkSubscription = checkBtn
+        checkBtn.rx.tap
+            .asDriver()
+            .debounce(0.2)
+            .drive(onNext: { [weak self] _ in
+                self?.testVerify()
+            })
+            .disposed(by: disposeBag)
+        
+        let restoreBtn = UIButton(frame: CGRect(x: 150, y: 200, width: 150, height: 80))
+        restoreBtn.setTitle("restore purchase", for: .normal)
+        restoreBtn.setTitleColor(.systemBlue, for: .normal)
+        view.addSubview(restoreBtn)
+        self.restoreBtn = restoreBtn
+        restoreBtn.rx.tap
+            .asDriver()
+            .debounce(0.2)
+            .drive(onNext: { [weak self] _ in
+                self?.testRestorePurchase()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    func testRetieveInfo() {
+        InterAppPaymentService.shared.retrieveProductsInfo([AppStoreProducts.tenLifesPerMonth])
+            .subscribe(onSuccess: { (productSet) in
+                let product = productSet.first
+                print("got product is: \(product?.localizedTitle)")
+            }, onError: { error in
+                print("got error: \(error.localizedDescription)")
+            })
+        .disposed(by: disposeBag)
+    }
+    
+    func testVerify() {
 //        InterAppPaymentService.shared.retrieveProductsInfo()
         
 //        InterAppPaymentService.shared.verifyReceipt(product: .tenLifesPerMonth)
@@ -70,6 +129,13 @@ class GameViewController: UIViewController {
                     default:
                         break
                     }
+                    let alert = Alert()
+                    alert.show(title: "verify Error",
+                        message: iapError.localizedDescription,
+                        preferredStyle: .alert,
+                        actions: [DefaultAlertAction.ok(nil)],
+                        textFieldConfigurationHandlers: [],
+                        completion: nil)
                 }
             })
             .disposed(by: disposeBag)
@@ -95,10 +161,42 @@ class GameViewController: UIViewController {
                         print("未连接网络")
                     case .cancelled:
                         print("购买被取消")
+                    default:
+                        break
                     }
+                    
+                    let alert = Alert()
+                    alert.show(title: "Purchase Error",
+                        message: iapError.localizedDescription,
+                        preferredStyle: .alert,
+                        actions: [DefaultAlertAction.ok(nil)],
+                        textFieldConfigurationHandlers: [],
+                        completion: nil)
                 }
             })
             .disposed(by: disposeBag)
+    }
+    
+    func testRestorePurchase() {
+        InterAppPaymentService.shared.restorePurchase()
+            .subscribe(onSuccess: { (_) in
+                let alert = Alert()
+                alert.show(title: "",
+                           message: "Restore Successful",
+                           preferredStyle: .alert,
+                           actions: [DefaultAlertAction.ok(nil)],
+                           textFieldConfigurationHandlers: [],
+                           completion: nil)
+            }, onError: { error in
+                let alert = Alert()
+                alert.show(title: "Restore Error",
+                           message: error.localizedDescription,
+                           preferredStyle: .alert,
+                           actions: [DefaultAlertAction.ok(nil)],
+                           textFieldConfigurationHandlers: [],
+                           completion: nil)
+            })
+        .disposed(by: disposeBag)
     }
 
     override var shouldAutorotate: Bool {

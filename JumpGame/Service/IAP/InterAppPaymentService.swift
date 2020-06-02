@@ -35,7 +35,7 @@ enum AppStoreProductType {
     var sharedSecret: String? {
         switch self {
         case .autoRenewSubscription:
-            return ""
+            return "aece2046093240139422615213915d98"
         default:
             return nil
         }
@@ -55,7 +55,7 @@ enum AppStoreProducts: CaseIterable {
     var type: AppStoreProductType {
         switch self {
         case .tenLifesPerMonth:
-            return .nonAutoRenewSubscription
+            return .autoRenewSubscription
         }
     }
     
@@ -102,7 +102,7 @@ struct InterAppPaymentService {
     func purchaseProduct(_ product: AppStoreProducts) -> Single<Void> {
         return Single<Void>.create { (single) -> Disposable in
             
-            SwiftyStoreKit.purchaseProduct(product.productID, atomically: true) { result in
+            SwiftyStoreKit.purchaseProduct(product.productID, atomically: false) { result in
                 switch result {
                 case .success(let purchase):
                     // Deliver content from server, then:
@@ -138,7 +138,8 @@ struct InterAppPaymentService {
                     guard let _ = items.first(where: { $0.productId == product.productID }) else {
                         return Single.error(AppError.IAPError.invalidProductID)
                     }
-                case .expired:
+                case .expired(let expiredDate, _):
+                    print("expired time: \(expiredDate)")
                     return Single.error(AppError.IAPError.expired)
                 case .notPurchased:
                     return Single.error(AppError.IAPError.notPurchased)
@@ -198,6 +199,28 @@ struct InterAppPaymentService {
                 }
             }
             
+            return Disposables.create()
+        }
+    }
+    
+    func restorePurchase() -> Single<Void> {
+        return Single<Void>.create { (single) -> Disposable in
+            // Non-Atomic: to be used when the content is delivered by the server.
+            SwiftyStoreKit.restorePurchases(atomically: false) { results in
+                if results.restoreFailedPurchases.count > 0 {
+                    single(.error(AppError.IAPError.restorePurchaseFail))
+                } else if results.restoredPurchases.count > 0 {
+                    results.restoredPurchases.forEach{
+                        // fetch content from your server, then:
+                        if $0.needsFinishTransaction {
+                            SwiftyStoreKit.finishTransaction($0.transaction)
+                        }
+                    }
+                    single(.success(()))
+                } else {
+                    single(.error(AppError.IAPError.nothingCanRestore))
+                }
+            }
             return Disposables.create()
         }
     }
